@@ -211,3 +211,6 @@ scrape.log
 # OS
 .DS_Store
 Thumbs.db
+
+# AI folders
+.omc/
