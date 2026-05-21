@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pantry-cooking-vibes-hellofresh"
+version = "0.1.0"
+description = "HelloFresh recipe scraper + post-process plugin for pantry-cooking-vibes core"
+requires-python = ">=3.11"
+dependencies = [
+    "pantry-cooking-vibes",
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+]
+
+[project.entry-points."pantry_cooking_vibes.importers"]
+hellofresh = "pantry_cooking_vibes_hellofresh.plugin:HelloFreshImporter"
+
+[project.scripts]
+hellofresh-transform = "pantry_cooking_vibes_hellofresh.transform:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.8",
+    "ty>=0.0.1a4",
+]
+
+[tool.uv.sources]
+# Resolve the core package from GitHub so this scraper can build standalone
+# (CI, fresh clones). For local dev against a sibling checkout, run
+# `uv pip install -e ../..` after `uv sync` to shadow the git pin.
+pantry-cooking-vibes = { git = "https://github.com/twistedvip/pantry-cooking-vibes.git", branch = "main" }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pantry_cooking_vibes_hellofresh"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]

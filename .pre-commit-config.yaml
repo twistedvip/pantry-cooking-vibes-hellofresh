@@ -1,0 +1,43 @@
+# Pre-commit hooks for pantry-cooking-vibes.
+# Install: `uv tool install pre-commit && pre-commit install`
+# Run all: `pre-commit run --all-files`
+
+ci:
+  skip: [ty]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.0
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+        files: \.py$
+        exclude: ^(tests).*$
+      - id: ruff-format
+        files: \.py$
+  - repo: local
+    hooks:
+      - id: ty
+        name: ty check
+        entry: uv run ty check . --ignore unresolved-import
+        language: python
+        types: [python]
+        pass_filenames: false
+
+#  - repo: https://github.com/astral-sh/ty-pre-commit
+#    rev: 0.0.1-alpha.4
+#    hooks:
+#      - id: ty-check
+#        args: ["check", "src"]
